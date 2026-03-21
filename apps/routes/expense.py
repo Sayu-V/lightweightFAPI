@@ -17,3 +17,23 @@ def add_expense(data: Expense):
     })
 
     return {"message": "Expense added successfully"}
+
+from collections import defaultdict
+
+@router.get("/expense-by-category", tags=["Analytics"])
+def expense_by_category():
+    category_totals = defaultdict(float)
+
+    # Aggregate expenses
+    for exp in expenses:
+        category_totals[exp["category"]] += exp["amount"]
+
+    # Convert to list and sort DESC
+    result = [
+        {"category": cat, "total": total}
+        for cat, total in category_totals.items()
+    ]
+
+    result.sort(key=lambda x: x["total"], reverse=True)
+
+    return {"categories": result}
