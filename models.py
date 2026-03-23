@@ -22,3 +22,7 @@ class BudgetResponse(BaseModel):
     budget: float
     spent: float
     remaining: float
+
+class Expense(BaseModel):
+    amount: float
+    category: str
