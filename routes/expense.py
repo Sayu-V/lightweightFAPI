@@ -1,7 +1,6 @@
-
-    from fastapi import APIRouter, HTTPException
+  from fastapi import APIRouter, HTTPException
 from app.models import Expense, MessageResponse
-
+from collections import defaultdict
 router = APIRouter()
 
 # Store full expense object now (not just amount)
@@ -18,3 +17,21 @@ def add_expense(data: Expense):
     })
 
     return {"message": "Expense added successfully"}
+
+@router.get("/expense-by-category", tags=["Analytics"])
+def expense_by_category():
+    category_totals = defaultdict(float)
+
+    # Aggregate expenses
+    for exp in expenses:
+        category_totals[exp["category"]] += exp["amount"]
+
+    # Convert to list and sort DESC
+    result = [
+        {"category": cat, "total": total}
+        for cat, total in category_totals.items()
+    ]
+
+    result.sort(key=lambda x: x["total"], reverse=True)
+
+    return {"categories": result}
