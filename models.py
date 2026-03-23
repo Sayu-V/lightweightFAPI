@@ -1,15 +1,24 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
-# ✅ INCOME MODEL
 class Income(BaseModel):
-    amount: float = Field(..., gt=0)
-    source: str = Field(..., min_length=1, max_length=50)
+    amount: float
 
-# ✅ EXPENSE MODEL
 class Expense(BaseModel):
-    amount: float = Field(..., gt=0)
-    category: str = Field(..., min_length=1, max_length=50)
+    amount: float
 
-# ✅ BUDGET MODEL
 class Budget(BaseModel):
-    limit: float = Field(..., gt=0)
+    limit: float
+
+# Response Models
+class MessageResponse(BaseModel):
+    message: str
+
+class SummaryResponse(BaseModel):
+    total_income: float
+    total_expense: float
+    balance: float
+
+class BudgetResponse(BaseModel):
+    budget: float
+    spent: float
+    remaining: float
