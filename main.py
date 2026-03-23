@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from models import Income, Expense, Budget
+from app.routes import income, expense, summary, budget
 
 app = FastAPI()
 
@@ -45,5 +46,13 @@ def get_budget_status():
         "spent": total_expense,
         "remaining": budget - total_expense
     }
+# Include routers
+app.include_router(income.router)
+app.include_router(expense.router)
+app.include_router(summary.router)
+app.include_router(budget.router)
 
-
+# ✅ ADD HEALTH CHECK HERE
+@app.get("/health", tags=["System"])
+async def health_check():
+    return {"status": "API is running"}
